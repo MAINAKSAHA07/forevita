@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import * as d3 from 'd3'
 import { architectureLinks, architectureNodes, type ArchitectureId } from '../data/plan'
 
@@ -18,9 +18,99 @@ type LaidOut = {
   h: number
 }
 
+const layeredRows: ArchitectureId[][] = [
+  ['member', 'clinician', 'admin'],
+  ['api'],
+  ['supabase', 'okf', 'stripe'],
+  ['claude'],
+]
+
+type LayoutResult = {
+  laid: LaidOut[]
+  height: number
+  minWidth?: number
+}
+
+function layoutLayered(width: number): LayoutResult {
+  const pad = 16
+  const gap = 10
+  const rowGap = 22
+  const nodeH = 40
+  const laid: LaidOut[] = []
+  let y = pad
+
+  for (const row of layeredRows) {
+    const count = row.length
+    const nodeW = Math.max(96, Math.min(168, (width - pad * 2 - gap * (count - 1)) / count))
+    const rowWidth = count * nodeW + (count - 1) * gap
+    let x = (width - rowWidth) / 2
+
+    for (const id of row) {
+      const node = architectureNodes.find((item) => item.id === id)
+      if (!node) continue
+      laid.push({ id: node.id, label: node.label, x, y, w: nodeW, h: nodeH })
+      x += nodeW + gap
+    }
+
+    y += nodeH + rowGap
+  }
+
+  return { laid, height: y + pad - rowGap }
+}
+
+function layoutWide(width: number): LayoutResult {
+  const pad = 16
+  const cols = 4
+  const rows = 3
+  const nodeH = 40
+  const minNodeW = 96
+  const maxNodeW = 132
+  const nodeW = Math.max(minNodeW, Math.min(maxNodeW, (width - pad * 2 - 12 * (cols - 1)) / cols))
+  const colGap = cols > 1 ? (width - pad * 2 - cols * nodeW) / (cols - 1) : 0
+  const rowGap = 24
+  const height = pad * 2 + rows * nodeH + (rows - 1) * rowGap
+
+  const laid: LaidOut[] = architectureNodes.map((node) => ({
+    id: node.id,
+    label: node.label,
+    x: pad + node.col * (nodeW + colGap),
+    y: pad + node.row * (nodeH + rowGap),
+    w: nodeW,
+    h: nodeH,
+  }))
+
+  return { laid, height, minWidth: pad * 2 + cols * nodeW + (cols - 1) * colGap }
+}
+
+function linkPath(source: LaidOut, target: LaidOut, reduced: boolean) {
+  const x1 = source.x + source.w / 2
+  const y1 = source.y + source.h / 2
+  const x2 = target.x + target.w / 2
+  const y2 = target.y + target.h / 2
+  const dx = x2 - x1
+  const dy = y2 - y1
+
+  if (reduced) {
+    return `M${x1},${y1} L${x2},${y2}`
+  }
+
+  if (Math.abs(dx) >= Math.abs(dy)) {
+    const sx = dx > 0 ? source.x + source.w : source.x
+    const tx = dx > 0 ? target.x : target.x + target.w
+    const mx = (sx + tx) / 2
+    return `M${sx},${y1} C${mx},${y1} ${mx},${y2} ${tx},${y2}`
+  }
+
+  const sy = dy > 0 ? source.y + source.h : source.y
+  const ty = dy > 0 ? target.y : target.y + target.h
+  const my = (sy + ty) / 2
+  return `M${x1},${sy} C${x1},${my} ${x2},${my} ${x2},${ty}`
+}
+
 export function ArchitectureGraph({ activeId, onSelect, reduced, theme }: ArchitectureGraphProps) {
   const wrapRef = useRef<HTMLDivElement>(null)
   const svgRef = useRef<SVGSVGElement>(null)
+  const [graphHeight, setGraphHeight] = useState(340)
 
   useEffect(() => {
     const wrap = wrapRef.current
@@ -30,61 +120,23 @@ export function ArchitectureGraph({ activeId, onSelect, reduced, theme }: Archit
 
     const render = () => {
       const width = wrap.clientWidth
-      const compact = width < 720
-      const height = compact ? 520 : 340
+      const layered = width < 768
       const styles = getComputedStyle(wrap)
       const ink = styles.getPropertyValue('--ink').trim()
-      const muted = styles.getPropertyValue('--muted').trim()
+      const onAccent = styles.getPropertyValue('--on-accent').trim()
       const accent = styles.getPropertyValue('--accent').trim()
-      const accentSoft = styles.getPropertyValue('--accent-soft').trim()
       const line = styles.getPropertyValue('--line').trim()
       const elevated = styles.getPropertyValue('--elevated').trim()
 
-      svg.attr('viewBox', `0 0 ${width} ${height}`).attr('width', width).attr('height', height)
+      const layout = layered ? layoutLayered(width) : layoutWide(width)
+      const { laid, height } = layout
+      const viewWidth = layout.minWidth ? Math.max(width, layout.minWidth) : width
+
+      svg.attr('viewBox', `0 0 ${viewWidth} ${height}`).attr('width', viewWidth).attr('height', height)
       svg.selectAll('*').remove()
-
-      const nodeW = compact ? Math.min(width - 32, 200) : Math.min(128, (width - 48) / 4.4)
-      const nodeH = compact ? 36 : 40
-      const cols = 4
-      const rows = 3
-
-      const laid: LaidOut[] = architectureNodes.map((node) => {
-        if (compact) {
-          const index = architectureNodes.findIndex((item) => item.id === node.id)
-          return {
-            id: node.id,
-            label: node.label,
-            x: (width - nodeW) / 2,
-            y: 16 + index * 62,
-            w: nodeW,
-            h: nodeH,
-          }
-        }
-        const colGap = (width - nodeW * cols) / (cols + 1)
-        const rowGap = (height - nodeH * rows) / (rows + 1)
-        return {
-          id: node.id,
-          label: node.label,
-          x: colGap + node.col * (nodeW + colGap),
-          y: rowGap + node.row * (nodeH + rowGap),
-          w: nodeW,
-          h: nodeH,
-        }
-      })
+      setGraphHeight(height)
 
       const byId = new Map(laid.map((node) => [node.id, node]))
-
-      const linkPath = (source: LaidOut, target: LaidOut) => {
-        const x1 = source.x + source.w / 2
-        const y1 = source.y + source.h / 2
-        const x2 = target.x + target.w / 2
-        const y2 = target.y + target.h / 2
-        if (compact) {
-          return `M${x1},${source.y + source.h} C${x1},${y1 + 20} ${x2},${y2 - 20} ${x2},${target.y}`
-        }
-        const mx = (x1 + x2) / 2
-        return `M${source.x + source.w},${y1} C${mx},${y1} ${mx},${y2} ${target.x},${y2}`
-      }
 
       svg
         .append('g')
@@ -95,7 +147,7 @@ export function ArchitectureGraph({ activeId, onSelect, reduced, theme }: Archit
           const source = byId.get(d.source)
           const target = byId.get(d.target)
           if (!source || !target) return ''
-          return linkPath(source, target)
+          return linkPath(source, target, Boolean(reduced))
         })
         .attr('fill', 'none')
         .attr('stroke', (d) => (d.source === activeId || d.target === activeId ? accent : line))
@@ -138,14 +190,10 @@ export function ArchitectureGraph({ activeId, onSelect, reduced, theme }: Archit
         .attr('y', (d) => d.h / 2)
         .attr('dy', '0.35em')
         .attr('text-anchor', 'middle')
-        .attr('fill', (d) => (d.id === activeId ? (theme === 'dark' ? ink : '#f4f7f5') : ink))
-        .attr('font-size', compact ? 12 : 13)
+        .attr('fill', (d) => (d.id === activeId ? onAccent : ink))
+        .attr('font-size', layered ? 12 : 13)
         .attr('font-family', 'Outfit Variable, Outfit, sans-serif')
         .text((d) => d.label)
-
-      void muted
-      void accentSoft
-      void reduced
     }
 
     render()
@@ -158,10 +206,11 @@ export function ArchitectureGraph({ activeId, onSelect, reduced, theme }: Archit
   }, [activeId, onSelect, reduced, theme])
 
   return (
-    <div ref={wrapRef} className="w-full min-w-0">
+    <div ref={wrapRef} className="w-full min-w-0 overflow-x-auto [scrollbar-width:thin] md:overflow-visible">
       <svg
         ref={svgRef}
-        className="h-[520px] w-full sm:h-[340px]"
+        className="block w-full min-w-0 md:min-w-full"
+        style={{ height: graphHeight }}
         role="img"
         aria-label="How ForeVita surfaces, API, Supabase, OKF knowledge, Stripe, and Claude connect"
       />

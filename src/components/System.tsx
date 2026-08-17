@@ -26,7 +26,7 @@ export function System() {
           </article>
         ))}
       </div>
-      <div className="mt-8 min-w-0 overflow-x-auto rounded-[16px] border border-line bg-elevated p-2 sm:p-3">
+      <div className="mt-8 min-w-0 rounded-[16px] border border-line bg-elevated p-2 sm:p-3">
         <ArchitectureGraph activeId={activeId} onSelect={setActiveId} reduced={Boolean(reduce)} theme={theme} />
       </div>
       <div className="mt-4" aria-live="polite">
