@@ -50,7 +50,7 @@ export function Chat() {
         })}
       </div>
       <div className="mt-5 min-w-0 overflow-x-auto pb-1 ps-1 [scrollbar-width:thin] sm:overflow-visible sm:ps-0">
-        <ChatFlow activeId={activeId} />
+        <ChatFlow activeId={activeId} onSelect={setActiveId} />
       </div>
       <div
         id="chat-panel"
