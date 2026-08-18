@@ -10,6 +10,7 @@ import { Stack } from './components/Stack'
 import { Surfaces } from './components/Surfaces'
 
 const Scope = lazy(() => import('./components/Scope').then((module) => ({ default: module.Scope })))
+const Canvas = lazy(() => import('./components/Canvas').then((module) => ({ default: module.Canvas })))
 const System = lazy(() => import('./components/System').then((module) => ({ default: module.System })))
 const Chat = lazy(() => import('./components/Chat').then((module) => ({ default: module.Chat })))
 const Weeks = lazy(() => import('./components/Weeks').then((module) => ({ default: module.Weeks })))
@@ -41,6 +42,9 @@ export default function App() {
           <Scope />
         </Suspense>
         <Surfaces />
+        <Suspense fallback={<SectionFallback height="h-[28rem]" />}>
+          <Canvas />
+        </Suspense>
         <Suspense fallback={<SectionFallback height="h-[28rem]" />}>
           <System />
         </Suspense>

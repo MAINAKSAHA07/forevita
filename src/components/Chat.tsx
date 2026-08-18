@@ -1,7 +1,9 @@
 import { motion, useReducedMotion } from 'motion/react'
 import { useState } from 'react'
 import { ChatFlow } from '../charts/ChatFlow'
-import { chatAgents, chatGuardrails, chatKnowledge, chatOkfWiring, chatPipeline, premiumPrice, type ChatAgentId } from '../data/plan'
+import { ChatOkfWiring } from '../charts/ChatOkfWiring'
+import { ChatPipeline } from '../charts/ChatPipeline'
+import { chatAgents, chatGuardrails, chatKnowledge, premiumPrice, type ChatAgentId } from '../data/plan'
 import { usd } from '../lib/format'
 import { Section } from './Section'
 
@@ -87,32 +89,25 @@ export function Chat() {
           <p className="mt-4 text-sm leading-relaxed text-ink">{active.review}</p>
         </div>
       </div>
-      <div className="mt-10">
-        <h3 className="text-xl font-medium text-ink sm:text-2xl">From question to answer</h3>
-        <ol className="mt-5 grid min-w-0 gap-4 sm:grid-cols-2">
-          {chatPipeline.map((step, index) => (
-            <li key={step.title} className="min-w-0 border-t border-line pt-3">
-              <p className="font-mono text-xs text-muted">{String(index + 1).padStart(2, '0')}</p>
-              <h4 className="mt-1 text-base font-medium text-ink">{step.title}</h4>
-              <p className="mt-2 text-sm leading-relaxed text-muted">{step.body}</p>
-            </li>
-          ))}
-        </ol>
-      </div>
-      <div className="mt-10">
-        <h3 className="text-xl font-medium text-ink sm:text-2xl">How OKF is wired</h3>
-        <p className="mt-3 max-w-[62ch] text-base leading-relaxed text-muted">
-          Admin authors concepts. The API scopes them per agent. The adapter assembles the bundle by link before Claude is called. Provenance rides back on every streamed reply.
+      <div className="mt-12 overflow-hidden rounded-[18px] border border-line/80 bg-gradient-to-br from-accent-soft/30 via-elevated/70 to-elevated/40 p-5 backdrop-blur-sm sm:p-6">
+        <p className="font-mono text-xs tracking-wide text-accent uppercase">Inference path</p>
+        <h3 className="text-display mt-2 text-xl font-medium tracking-[-0.02em] text-ink sm:text-2xl">From question to answer</h3>
+        <p className="mt-2 max-w-[58ch] text-sm leading-relaxed text-muted sm:text-base">
+          Every message runs the same four server-side stages. Tap a step to see what happens before the member sees a token.
         </p>
-        <ol className="mt-6">
-          {chatOkfWiring.map((step, index) => (
-            <li key={step.title} className="border-t border-line py-4">
-              <p className="font-mono text-xs text-muted">{String(index + 1).padStart(2, '0')}</p>
-              <h4 className="mt-1 text-base font-medium text-ink">{step.title}</h4>
-              <p className="mt-2 max-w-[65ch] text-sm leading-relaxed text-muted">{step.body}</p>
-            </li>
-          ))}
-        </ol>
+        <div className="mt-6">
+          <ChatPipeline activeAgentCode={active.code} />
+        </div>
+      </div>
+      <div className="mt-12 overflow-hidden rounded-[18px] border border-line/80 bg-elevated/40 p-5 backdrop-blur-sm sm:p-6">
+        <p className="font-mono text-xs tracking-wide text-accent uppercase">Knowledge wire</p>
+        <h3 className="text-display mt-2 text-xl font-medium tracking-[-0.02em] text-ink sm:text-2xl">How OKF is wired</h3>
+        <p className="mt-2 max-w-[58ch] text-sm leading-relaxed text-muted sm:text-base">
+          Admin authors concepts. The API scopes them per agent. The adapter follows named links, not a search index. Provenance pins on every streamed reply.
+        </p>
+        <div className="mt-6">
+          <ChatOkfWiring />
+        </div>
       </div>
       <div className="mt-10">
         <h3 className="text-xl font-medium text-ink sm:text-2xl">What it knows</h3>

@@ -7,7 +7,7 @@ import {
   XAxis,
   YAxis,
 } from 'recharts'
-import { requirementDomains } from '../data/plan'
+import { canvasCapability } from '../data/plan'
 import { count } from '../lib/format'
 
 type ScopeBarsProps = {
@@ -23,7 +23,7 @@ export function ScopeBars({ theme }: ScopeBarsProps) {
     <div className="h-[220px] w-full min-w-0 sm:h-[280px]">
       <ResponsiveContainer width="100%" height="100%">
         <BarChart
-          data={[...requirementDomains]}
+          data={[...canvasCapability]}
           layout="vertical"
           margin={{ top: 4, right: 8, left: 0, bottom: 0 }}
         >
@@ -32,20 +32,22 @@ export function ScopeBars({ theme }: ScopeBarsProps) {
           <YAxis
             type="category"
             dataKey="name"
-            width={88}
+            width={92}
             tick={{ fill: tick, fontSize: 11, fontFamily: 'Outfit Variable, Outfit, sans-serif' }}
             axisLine={false}
             tickLine={false}
-            tickFormatter={(value: string) => value.replace(' backoffice', '').replace(' portal', '').replace(' platform', '').replace(' conditions', '').replace(' console', '')}
           />
           <Tooltip
             cursor={{ fill: theme === 'dark' ? 'rgba(143,203,170,0.12)' : 'rgba(28,79,54,0.08)' }}
             content={({ active, payload }) => {
               if (!active || !payload?.[0]) return null
-              const item = payload[0].payload as (typeof requirementDomains)[number]
+              const item = payload[0].payload as (typeof canvasCapability)[number]
               return (
-                <div className="rounded-lg border border-line bg-elevated px-3 py-2 text-sm text-ink shadow-sm">
-                  {item.name}: {count.format(item.count)} requirements
+                <div className="max-w-[28ch] rounded-lg border border-line bg-elevated px-3 py-2 text-sm text-ink shadow-sm">
+                  <p>
+                    {item.name}: {count.format(item.count)} of 238
+                  </p>
+                  <p className="mt-1 text-muted">{item.hint}</p>
                 </div>
               )
             }}

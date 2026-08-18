@@ -14,7 +14,7 @@ export function Scope() {
         <div className="min-w-0">
           <h2 className="text-display text-2xl font-medium text-ink sm:text-3xl md:text-4xl">The first shippable increment</h2>
           <p className="mt-3 max-w-[62ch] text-base leading-relaxed text-muted">
-            Every stage of the journey is present and operable. Depth is deliberately shallow: one phase agent, one extraction format, a subset of lab exceptions, and vendor steps served by stubs until contracts exist.
+            Every stage of the journey is present and operable. Canvas covers charting, eRx, labs, scheduling, and portal. ForeVita builds the member product, AI, and API consumption on top.
           </p>
           <dl className="mt-6 grid grid-cols-2 overflow-hidden rounded-[16px] border border-line bg-elevated sm:grid-cols-4">
             {metrics.map((item) => (

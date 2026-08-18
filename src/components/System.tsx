@@ -8,7 +8,7 @@ import { Section } from './Section'
 export function System() {
   const reduce = useReducedMotion()
   const { theme } = useTheme()
-  const [activeId, setActiveId] = useState<ArchitectureId>('okf')
+  const [activeId, setActiveId] = useState<ArchitectureId>('canvas')
   const active = architectureNodes.find((node) => node.id === activeId) ?? architectureNodes[0]
   if (!active) return null
 
@@ -16,7 +16,7 @@ export function System() {
     <Section id="system">
       <h2 className="text-display text-2xl font-medium text-ink sm:text-3xl md:text-4xl">How the product is wired</h2>
       <p className="mt-3 max-w-[62ch] text-base leading-relaxed text-muted">
-        Three surfaces share one API. The API holds the member record in Supabase, charges through Stripe, and grounds Claude in an Open Knowledge Format bundle rather than a vector index.
+        Member web and admin talk to the ForeVita API. Clinicians work in Canvas. The API consumes FHIR, holds the member record in Supabase, and grounds Claude in OKF rather than a vector index.
       </p>
       <div className="mt-6 grid min-w-0 gap-5">
         {projectBeats.map((beat) => (

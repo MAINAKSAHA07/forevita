@@ -20,8 +20,8 @@ type LaidOut = {
 
 const layeredRows: ArchitectureId[][] = [
   ['member', 'clinician', 'admin'],
-  ['api'],
-  ['supabase', 'okf', 'stripe'],
+  ['okf', 'api'],
+  ['supabase', 'canvas', 'stripe'],
   ['claude'],
 ]
 
@@ -212,7 +212,7 @@ export function ArchitectureGraph({ activeId, onSelect, reduced, theme }: Archit
         className="block w-full min-w-0 md:min-w-full"
         style={{ height: graphHeight }}
         role="img"
-        aria-label="How ForeVita surfaces, API, Supabase, OKF knowledge, Stripe, and Claude connect"
+        aria-label="How ForeVita surfaces, API, Canvas, Supabase, OKF, Stripe, and Claude connect"
       />
     </div>
   )

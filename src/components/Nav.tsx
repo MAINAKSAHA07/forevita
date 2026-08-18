@@ -5,10 +5,10 @@ import { useTheme } from '../theme'
 
 const links = [
   { href: '#plan', label: 'Plan' },
-  { href: '#weeks', label: 'Weeks' },
-  { href: '#surfaces', label: 'Surfaces' },
+  { href: '#canvas', label: 'Canvas' },
   { href: '#system', label: 'System' },
   { href: '#chat', label: 'Chat' },
+  { href: '#weeks', label: 'Weeks' },
   { href: '#release', label: 'Release' },
 ] as const
 

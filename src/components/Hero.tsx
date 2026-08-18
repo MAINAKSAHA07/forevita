@@ -14,7 +14,7 @@ export function Hero() {
             Four Weeks to a Complete Member Journey
           </h1>
           <p className="mt-3 max-w-[40ch] text-base leading-relaxed text-muted">
-            Stages 00 through 06 on responsive web, plus clinician console and admin, thin in depth and complete in shape.
+            Stages 00 through 06 on responsive web, plus Canvas for clinical ops, ForeVita AI, and admin. Thin in depth, complete in shape.
           </p>
           <div className="mt-4 flex flex-wrap gap-2">
             <a

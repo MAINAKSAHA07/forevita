@@ -29,7 +29,7 @@ export function Surfaces() {
     <Section id="surfaces">
       <h2 className="text-display max-w-[16ch] text-2xl font-medium text-ink sm:text-3xl md:text-4xl">Three surfaces, one product</h2>
       <p className="mt-3 max-w-[60ch] text-base leading-relaxed text-muted">
-        Member web carries the journey. Clinician console signs off what the model cannot. Admin runs the business behind both.
+        Member web carries the journey. Clinicians chart in Canvas. ForeVita admin and AI sit on top through API consumption.
       </p>
       <div className="mt-6 grid gap-3 lg:grid-cols-3 lg:grid-rows-2 lg:gap-4">
         <motion.article

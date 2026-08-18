@@ -12,12 +12,12 @@ export const surfaces = [
     id: 'member',
     title: 'Member web',
     body: 'Stages 00 through 06 on responsive web. Free tier first. Premium locks stay visible.',
-    points: ['Anonymous streamed chat', 'Intake you can save and resume', 'Formula with source traces'],
+    points: ['Anonymous streamed chat', 'Intake with plugin autosave', 'Formula with source traces'],
   },
   {
     id: 'clinician',
-    title: 'Clinician console',
-    body: 'Review queue, sign-off, async encounters, flag triage, and chat as a visible event.',
+    title: 'Clinician workspace',
+    body: 'Canvas for charting, orders, and sign-off. ForeVita plugin for review queue, tier-two blocking, async encounters, and AI as a visible event.',
     points: ['Tier two blocks until signed', 'Licensure-aware routing', 'Structured corrections'],
   },
   {
@@ -56,7 +56,7 @@ export const ganttBars: GanttBar[] = [
   { stream: 'ai', week: 3, label: 'One phase specialist' },
   { stream: 'admin', week: 3, label: 'Catalogue and pricing' },
   { stream: 'member', week: 4, label: 'Cycle, pause, exceptions' },
-  { stream: 'clinician', week: 4, label: 'Queue, sign-off, on-call' },
+  { stream: 'clinician', week: 4, label: 'Canvas chart, ForeVita queue' },
   { stream: 'admin', week: 4, label: 'Ops, billing, analytics' },
   { stream: 'qa', week: 4, label: 'Guardrail failing cases' },
   { stream: 'qa', week: 5, label: 'Mock journey and rehearsal' },
@@ -71,10 +71,10 @@ export const weeks = [
     items: [
       'Supabase environment, repository, and GitHub Actions',
       'Core object schema in Supabase Postgres',
-      'Supabase Auth, roles, and consent capture',
+      'Canvas org setup, FHIR credentials, and consent types',
       'Visual direction and the first component set',
       'Landing page with streamed anonymous chat',
-      'Structured intake with save and resume',
+      'Intake autosave design against Canvas form limits (CAN-06, INT-02)',
       'Admin shell with role-based access',
       'OKF seed for phases, bands, and the first protocols',
     ],
@@ -105,8 +105,8 @@ export const weeks = [
       'One phase specialist, scoped by protocol not copy',
       'Detailed formula with versions and stated reasons',
       'Supplement, approved Rx, and compounded paths kept separate',
-      'Kit lifecycle status strip',
-      'Results and trends with cycle day on the chart',
+      'Kit lifecycle strip fed by vendor plugin store (LAB-05)',
+      'Trend chart plugin over Canvas observations (LAB-08)',
       'Admin catalogue: items, classes, evidence, pricing',
     ],
   },
@@ -116,7 +116,7 @@ export const weeks = [
     summary:
       'Review queue, lab exceptions, cycle packages, pause, operations, analytics, and tested safety rails.',
     items: [
-      'Clinician queue with tier two blocking and sign-off',
+      'Clinician queue in ForeVita with tier two blocking; charting in Canvas',
       'Review chip only where review actually happened',
       'Lab exception states with a route out of each',
       'Cycle package, clinic directory, consent-gated share',
@@ -154,7 +154,7 @@ export const stages = [
     title: 'Intake',
     week: 1,
     depth: 'thin',
-    note: 'Discrete fields, never a document. Save and resume. Cycle questions hidden from male members.',
+    note: 'Discrete fields, never a document. Save and resume needs plugin CustomModel or short forms. Cycle questions hidden from male members.',
   },
   {
     code: '02',
@@ -189,22 +189,22 @@ export const stages = [
     title: 'Cycle and care',
     week: 4,
     depth: 'thin',
-    note: 'Exception subset, clinic directory, pause, clinician review. Vendor steps stay stubbed.',
+    note: 'Exception subset, clinic directory, pause, clinician review. Canvas handles orders, results, and scheduling.',
   },
 ] as const
 
 export const stackGroups = [
   {
-    title: 'Application',
-    items: ['TypeScript', 'React and Vite', 'React Router', 'Tailwind', 'TanStack Query', 'Recharts'],
+    title: 'Member product',
+    items: ['TypeScript', 'React and Vite', 'React Router', 'Tailwind', 'TanStack Query', 'Supabase Postgres, Auth, Storage'],
   },
   {
-    title: 'API and data',
-    items: ['Supabase Postgres', 'Supabase Auth', 'Supabase Storage', 'Node and Express', 'Zod validation'],
+    title: 'Clinical platform',
+    items: ['Canvas Medical', 'FHIR API read and write', 'Canvas SDK and Studio', 'Note and Commands APIs', 'Read-only replica database'],
   },
   {
-    title: 'AI',
-    items: ['Anthropic Claude', 'Internal adapter only', 'Server-sent events', 'Open Knowledge Format'],
+    title: 'Orchestration and AI',
+    items: ['Node and Express', 'Zod validation', 'Anthropic Claude', 'Internal adapter', 'Server-sent events', 'Open Knowledge Format'],
   },
   {
     title: 'Operate',
@@ -213,32 +213,32 @@ export const stackGroups = [
 ] as const
 
 export const notInStack = [
-  'EMR',
-  'ePrescribing vendor',
-  'Lab vendor',
-  'Eligibility provider',
+  'Custom EMR beyond Canvas',
   'Wearables aggregator',
+  'Compounding pharmacy vendor',
+  'Employer channel integrations',
 ]
 
 export const toConfirm = [
+  'Canvas enrollment timing for Health Gorilla and Surescripts',
   'Infrastructure as code tool',
   'API hosting target',
   'Background jobs for kit timers',
-  'Email and SMS wiring',
+  'Email and SMS wiring beyond Canvas portal',
 ]
 
 export const projectBeats = [
   {
     title: 'Member journey',
-    body: 'A visitor asks in public chat, signs up with consents, completes intake, and is assigned a phase. Uploads become observations. A formula is generated and revised only on a new result, a visit, clinician input, or the member\'s own input.',
+    body: 'A visitor asks in public chat, signs up with consents, completes intake, and is assigned a phase. Uploads become observations. A formula is generated and revised only on a new result, a visit, clinician input, or the member\'s own input. This is ForeVita web and API work.',
   },
   {
-    title: 'Clinician and admin',
-    body: 'The console reviews blocking output, signs off, and captures structured corrections. Admin owns members, catalogue, OKF concepts, kits, billing, and audit. Nothing clinical is inferred that a human must confirm.',
+    title: 'Canvas clinical backbone',
+    body: 'Charting, e-prescribing, lab orders and results, scheduling, patient portal messaging, consents, and payments run on Canvas out of the box. ForeVita consumes the FHIR API and Canvas events. Enrollment for Health Gorilla, Surescripts, and billing integrations is configure work, not SOW build.',
   },
   {
     title: 'Intelligence',
-    body: 'Claude never sees raw PDFs or a vector dump. The adapter loads the member record from Supabase and the agent-scoped OKF bundle, then streams a grounded answer on top of the pretrained base. Guardrails are code, not prompt instructions.',
+    body: 'Claude never sees raw PDFs or a vector dump. The adapter loads the member record from Supabase, clinical facts from Canvas via FHIR, and the agent-scoped OKF bundle, then streams a grounded answer on top of the pretrained base. Guardrails are code, not prompt instructions.',
   },
 ] as const
 
@@ -248,56 +248,63 @@ export const architectureNodes = [
     label: 'Member web',
     col: 0,
     row: 0,
-    detail: 'Stages 00 through 06. Chat, intake, formula, kits, and purchase paths. Talks only to the API.',
+    detail: 'Stages 00 through 06. Chat, intake, formula, kits, and purchase paths. Talks only to the ForeVita API.',
   },
   {
     id: 'clinician',
     label: 'Clinician',
     col: 0,
     row: 1,
-    detail: 'Review queue, sign-off, async encounters, and chat as a visible event. Sees only members they may treat.',
+    detail: 'Works in Canvas for charting, orders, and sign-off. ForeVita review queue and AI events surface through API plugins.',
   },
   {
     id: 'admin',
     label: 'Admin',
     col: 0,
     row: 2,
-    detail: 'Members, catalogue, kit ops, billing, and OKF authorship. Clinical staff edit concepts without a deploy.',
+    detail: 'Members, catalogue, kit ops, billing, and OKF authorship. Canvas templates and consents configured here, not coded.',
+  },
+  {
+    id: 'okf',
+    label: 'OKF knowledge',
+    col: 1,
+    row: 0,
+    detail: 'Open Knowledge Format bundle: one markdown file per concept, YAML frontmatter, explicit links. Versioned records for protocols, bands, explainers, and copy rules.',
   },
   {
     id: 'api',
     label: 'Express API',
     col: 1,
     row: 1,
-    detail: 'Zod-validated TypeScript. Auth from Supabase. Assembles context, enforces protocol scope, and streams SSE.',
+    detail: 'Zod-validated TypeScript. Consumes Canvas FHIR, Supabase member state, and OKF bundles. Enforces protocol scope and streams SSE.',
   },
   {
     id: 'supabase',
     label: 'Supabase',
     col: 2,
     row: 0,
-    detail: 'Postgres for the member record, Auth for roles, Storage for uploads. Observations are discrete fields, not documents.',
+    detail: 'Postgres for the member product record, Auth for roles, Storage for uploads. Observations are discrete fields, not documents.',
   },
   {
-    id: 'okf',
-    label: 'OKF knowledge',
+    id: 'canvas',
+    label: 'Canvas',
     col: 2,
     row: 1,
-    detail: 'Open Knowledge Format bundle: one markdown file per concept, YAML frontmatter, explicit links. Versioned records. This is how the model knows protocols, bands, explainers, and copy rules.',
+    detail: 'Clinical platform: chart, eRx, labs via Health Gorilla, scheduling, portal, consents, documents, FHIR API, and Canvas AI tooling.',
   },
   {
     id: 'stripe',
     label: 'Stripe',
     col: 2,
     row: 2,
-    detail: 'Hosted elements. Tokenised card on file. Subscription, dunning, and add-on charges. No card data in the app.',
+    detail: 'Member subscription and add-ons in ForeVita. Canvas also supports patient payments and revenue cycle when enabled.',
   },
   {
     id: 'claude',
     label: 'Claude',
     col: 3,
     row: 1,
-    detail: 'Reached only through the internal adapter. No vendor SDK in application code. Output is reproducible from adapter, OKF versions, and member state.',
+    detail: 'Reached only through the internal adapter. Grounded on OKF, Supabase member state, and FHIR facts from Canvas. No vendor SDK in application code.',
   },
 ] as const
 
@@ -305,10 +312,11 @@ export type ArchitectureId = (typeof architectureNodes)[number]['id']
 
 export const architectureLinks: { source: ArchitectureId; target: ArchitectureId }[] = [
   { source: 'member', target: 'api' },
-  { source: 'clinician', target: 'api' },
+  { source: 'clinician', target: 'canvas' },
   { source: 'admin', target: 'api' },
   { source: 'admin', target: 'okf' },
   { source: 'api', target: 'supabase' },
+  { source: 'api', target: 'canvas' },
   { source: 'api', target: 'okf' },
   { source: 'api', target: 'stripe' },
   { source: 'api', target: 'claude' },
@@ -343,36 +351,52 @@ export const okfVsRag = [
   },
 ] as const
 
-export const requirementDomains = [
-  { name: 'Member portal', count: 76 },
-  { name: 'Admin backoffice', count: 35 },
-  { name: 'AI platform', count: 17 },
-  { name: 'Release conditions', count: 10 },
-  { name: 'Clinician console', count: 8 },
-  { name: 'Non-functional', count: 7 },
-]
+export const canvasCapability = [
+  {
+    name: 'Native',
+    count: 18,
+    hint: 'Yes, native in Canvas. Configure, do not build.',
+  },
+  {
+    name: 'Plugin / SDK',
+    count: 112,
+    hint: 'Yes, via Canvas SDK or plugin. This is ForeVita SOW on the platform.',
+  },
+  {
+    name: 'Partial',
+    count: 50,
+    hint: 'Canvas covers part of the row. ForeVita fills the remainder in plugin or overlay.',
+  },
+  {
+    name: 'Open',
+    count: 12,
+    hint: 'Needs discussion. Ten P0 and two P1 rows from the Canvas input sheet.',
+  },
+  {
+    name: 'ForeVita only',
+    count: 46,
+    hint: 'No in Canvas by design. Forty-four AI-layer rows and two public marketing-bridge rows.',
+  },
+] as const
 
-export const weekLoad = [
-  { week: 'W1', Platform: 1, Member: 1, AI: 0, Clinician: 0, Admin: 1, Guardrails: 0 },
-  { week: 'W2', Platform: 0, Member: 1, AI: 1, Clinician: 0, Admin: 1, Guardrails: 0 },
-  { week: 'W3', Platform: 0, Member: 1, AI: 1, Clinician: 0, Admin: 1, Guardrails: 0 },
-  { week: 'W4', Platform: 0, Member: 1, AI: 0, Clinician: 1, Admin: 1, Guardrails: 1 },
-  { week: 'W5', Platform: 0, Member: 0, AI: 0, Clinician: 0, Admin: 0, Guardrails: 1 },
-]
+export const canvasCapabilityByArea = [
+  { area: 'Journey', Native: 14, Plugin: 90, Partial: 28, Open: 7, ForeVita: 3 },
+  { area: 'Platform', Native: 4, Plugin: 4, Partial: 6, Open: 4, ForeVita: 0 },
+  { area: 'AI layer', Native: 0, Plugin: 18, Partial: 16, Open: 1, ForeVita: 43 },
+] as const
 
 export const stubbed = [
-  'Lab results and kit status',
-  'Prescriber approval',
-  'Pharmacy fulfilment',
+  'Kit logistics status until vendor or carrier feed lands (LAB-05)',
   'Partner clinic monitoring feed',
-  'Insurance eligibility',
+  'Compounding pharmacy handoff',
   'Wearable data',
-  'Email and SMS delivery',
+  'ForeVita-specific purchase paths pending catalogue lock',
 ]
 
 export const excluded = [
-  'EMR integration',
-  'Payer screens beyond a placeholder',
+  'Building an EMR from scratch',
+  'Custom e-prescribing stack',
+  'Custom lab network integration beyond Canvas enrollment',
   'Wearables',
   'Life phases four to six',
   'Employer channel',
@@ -382,6 +406,253 @@ export const excluded = [
   'Licensed clinical corpus beyond a seed',
   'Penetration, accessibility, and load testing',
 ]
+
+export const canvasTiers = [
+  { id: 'included', label: 'Included', note: 'Native in Canvas. Not SOW build work.' },
+  { id: 'configure', label: 'Configure', note: 'Enable and set up. No code.' },
+  { id: 'build', label: 'Build', note: 'ForeVita SOW on the Canvas platform.' },
+  { id: 'addons', label: 'Add-ons', note: 'Separate cost or out of scope.' },
+] as const
+
+export type CanvasTierId = (typeof canvasTiers)[number]['id']
+
+export const canvasScope: Record<CanvasTierId, { title: string; body: string }[]> = {
+  included: [
+    {
+      title: 'Clinical documentation and charting',
+      body: 'Patient chart, timeline, problem and medication lists, structured notes via commands, note templates, questionnaires with scoring dashboard, care plans, tasks, and chart review.',
+    },
+    {
+      title: 'E-prescribing and medications',
+      body: 'Surescripts and DrFirst e-prescribing including EPCS, medication history, and interaction checking via First Databank. Provider enrollment required.',
+    },
+    {
+      title: 'Labs and orders',
+      body: 'Lab ordering and structured results via Health Gorilla, point-of-care tests, and imaging or consult review. Health Gorilla enrollment required.',
+    },
+    {
+      title: 'Scheduling and patient engagement',
+      body: 'Appointments, provider availability, Google Calendar sync, secure messaging, portal intake, consents, after-visit summaries, lab delivery, and payments.',
+    },
+    {
+      title: 'Interoperability and AI tooling',
+      body: 'Full FHIR API read and write, Note and Commands APIs, read-only replica, bulk export, Hyperscribe, Canvas Chat, and SDK LLM client for plugins.',
+    },
+    {
+      title: 'Documents and interoperability',
+      body: 'Inbound fax and uploaded-document hub, send and receive faxing, PDF annotation, CCDA import and export, and FHIR bulk export for portability.',
+    },
+    {
+      title: 'Security and environments',
+      body: 'HITRUST CSF r2, HIPAA, SOC 2 Type 2 hosting, MFA, SSO, role model, production plus non-production environments, and standard onboarding.',
+    },
+  ],
+  configure: [
+    {
+      title: 'Templates and clinical setup',
+      body: 'Note templates, questionnaires, care-team roles, consent types, appointment types, org settings, and permission groups.',
+    },
+    {
+      title: 'Integration enrollment',
+      body: 'Turn on Health Gorilla, Surescripts or DrFirst, Candid or Claim MD, Zus, and EPCS with credentials. Setup, not custom code.',
+    },
+    {
+      title: 'ForeVita-specific Canvas config',
+      body: 'ForeVita consent wording, intake questionnaires, phase note templates, and feature flags aligned to the member journey.',
+    },
+  ],
+  build: [
+    {
+      title: 'Canvas plugins and portal pages',
+      body: 'SDK plugins, SimpleAPI endpoints, CustomModel storage, portal widgets, menu configuration, iframed custom pages, and WebSocket streaming for member chat. Most journey features land here, not as native Canvas screens.',
+    },
+    {
+      title: 'ForeVita member web and API',
+      body: 'Public marketing site, Surface-1 chat, bridge pages, Supabase member record, OKF adapter, guardrails, and API consumption of Canvas FHIR and events.',
+    },
+    {
+      title: 'Clinical workflow extensions',
+      body: 'Phase assignment UI, formula overlays, tier-two blocking, review queue hooks, kit state machines, optimal bands on observations, and fertility-specific gating.',
+    },
+    {
+      title: 'Admin and catalogue',
+      body: 'ForeVita backoffice for members, kits, catalogue, pricing, funnel analytics, and OKF authorship. Canvas handles chart configuration and clinical templates.',
+    },
+  ],
+  addons: [
+    {
+      title: 'Not included in Canvas base',
+      body: 'Custom room or chair scheduling beyond native Canvas, employer channel, wearables aggregator, compounding vendor integration, and at-home nurse dispatch.',
+    },
+    {
+      title: 'Separate revenue modules',
+      body: 'Full revenue-cycle module with claims, coverages, and clearinghouse when client-bill is not sufficient. Canvas Stripe patient payments may still apply.',
+    },
+    {
+      title: 'ForeVita engagement exclusions',
+      body: 'Life phases four to six, comprehensive testing add-on, full golden evaluation set, penetration and load testing, and licensed corpus beyond seed concepts.',
+    },
+  ],
+}
+
+export const canvasIntegration = [
+  {
+    title: 'ForeVita owns the member product',
+    body: 'Public chat, marketing bridge, formula, premium entitlements, and kit commerce live in ForeVita web and Supabase. Canvas is not involved until registration. The full AI layer is ForeVita, not Canvas.',
+  },
+  {
+    title: 'Canvas owns clinical operations',
+    body: 'Charting, prescribing, lab network, scheduling, portal messaging, and clinical documents stay on Canvas. Clinicians work in Canvas; plugins extend the portal.',
+  },
+  {
+    title: 'Plugins plus FHIR, not a parallel EMR',
+    body: '112 of 238 assessed requirements are plugin or SDK work on Canvas. Express consumes FHIR, reacts to Canvas events, and assembles AI context with OKF.',
+  },
+  {
+    title: 'SOW scope is the plugin and AI layer',
+    body: 'Native Canvas features and configure enrollments are not four-week build work. The SOW focuses on plugins, API consumption, ForeVita AI, and the public member surface.',
+  },
+] as const
+
+export const canvasAssessmentStats = [
+  { label: 'Requirements assessed', value: '238' },
+  { label: 'Native in Canvas', value: '18' },
+  { label: 'Plugin or SDK', value: '112' },
+  { label: 'Partial', value: '50' },
+  { label: 'P0 open questions', value: '10' },
+] as const
+
+export const canvasAssessmentNote =
+  'Capability assessment mapped from ForeVita requirements to Canvas support. Forty-six rows are No by design: forty-four are the ForeVita AI layer outside Canvas, two are the public marketing bridge before registration.'
+
+export const canvasStageBreakdown = [
+  { stage: 'Arrival', native: 3, plugin: 17, partial: 3, open: 2, forevita: 2, total: 27 },
+  { stage: 'Intake', native: 1, plugin: 5, partial: 1, open: 0, forevita: 0, total: 7 },
+  { stage: 'Phase', native: 1, plugin: 6, partial: 1, open: 1, forevita: 0, total: 9 },
+  { stage: 'Formula', native: 1, plugin: 7, partial: 1, open: 0, forevita: 1, total: 10 },
+  { stage: 'Premium', native: 2, plugin: 6, partial: 1, open: 0, forevita: 0, total: 9 },
+  { stage: 'Care', native: 3, plugin: 5, partial: 0, open: 0, forevita: 0, total: 8 },
+  { stage: 'Rx', native: 2, plugin: 11, partial: 10, open: 0, forevita: 0, total: 23 },
+  { stage: 'Labs', native: 1, plugin: 16, partial: 6, open: 4, forevita: 0, total: 27 },
+  { stage: 'Wearables', native: 0, plugin: 3, partial: 0, open: 0, forevita: 0, total: 3 },
+  { stage: 'Packages', native: 0, plugin: 5, partial: 5, open: 0, forevita: 0, total: 10 },
+  { stage: 'Transition', native: 0, plugin: 9, partial: 0, open: 0, forevita: 0, total: 9 },
+  { stage: 'Platform', native: 4, plugin: 4, partial: 6, open: 4, forevita: 0, total: 18 },
+  { stage: 'AI layer', native: 0, plugin: 18, partial: 16, open: 1, forevita: 43, total: 78 },
+] as const
+
+export const canvasLayerStack = [
+  {
+    id: 'member',
+    label: 'ForeVita member surface',
+    share: 'Public chat, marketing bridge, formula, commerce',
+    weight: 1,
+  },
+  {
+    id: 'plugins',
+    label: 'Plugins and API layer',
+    share: '112 plugin rows plus partial overlays on Canvas',
+    weight: 2,
+  },
+  {
+    id: 'configure',
+    label: 'Configure and enroll',
+    share: 'Health Gorilla, Surescripts, templates, consents',
+    weight: 1,
+  },
+  {
+    id: 'canvas',
+    label: 'Canvas clinical platform',
+    share: '18 native capabilities: chart, eRx, labs, portal, FHIR',
+    weight: 3,
+  },
+] as const
+
+export const canvasPartialGaps = [
+  {
+    id: 'CAN-02',
+    title: 'Portal sign-in styling',
+    body: 'Canvas owns sign-in and verification screens. Only logo, HTML banner, and background image are configurable. The bridge page stays on ForeVita.',
+  },
+  {
+    id: 'CAN-06',
+    title: 'Intake save and resume',
+    body: 'Portal forms submit whole. No native per-field draft persistence. Build autosave via plugin CustomModel or split intake into short forms.',
+  },
+  {
+    id: 'ACQ-07',
+    title: 'Session timeout',
+    body: 'Canvas session defaults to about thirty minutes of inactivity and browser-close expiry. Not per-customer configurable today. Align with CAN-10.',
+  },
+  {
+    id: 'LAB-08',
+    title: 'Cross-phase trend charts',
+    body: 'Observations are native over time. The fertility trend chart with panel-change markers is a custom portal plugin reading Canvas observations.',
+  },
+  {
+    id: 'APT-07',
+    title: 'Eligibility path',
+    body: 'Native 270/271 via Claim.MD. Confirm whether Bridge is a separate vendor or the Claim.MD path is sufficient. Stale-result gating is plugin logic.',
+  },
+  {
+    id: 'FRM-01',
+    title: 'Formula presentation',
+    body: 'Formula logic and provenance are ForeVita plugin and OKF work. Canvas stores artefacts and clinician sign-off, not the member-facing formula engine.',
+  },
+] as const
+
+export const canvasOpenQuestions = [
+  {
+    id: 'CAN-03',
+    title: 'Custom member domain',
+    body: 'Default portal lives on canvasmedical.com. Customer-owned subdomain is not supported today. Flag for platform conversation if hard requirement.',
+  },
+  {
+    id: 'CAN-10',
+    title: 'Longer member sessions',
+    body: 'Thirty-minute inactivity timeout may interrupt chat mid-conversation. Needs product decision and possible Canvas platform ask.',
+  },
+  {
+    id: 'LAB-05',
+    title: 'Kit logistics feed',
+    body: 'Health Gorilla carries results, not kit shipping or return tracking. Kit status must come from the kit vendor or carrier into a plugin store.',
+  },
+  {
+    id: 'LAB-15',
+    title: 'Cycle day on observations',
+    body: 'AOE questions can go on the order, but answers may not round-trip onto the resulting observation. Confirm with Health Gorilla and Canvas before build.',
+  },
+  {
+    id: 'LAB-11',
+    title: 'Critical result hold',
+    body: 'Canvas has release controls and Tasks, but automatic critical hold, on-call routing, and timed release are not turnkey. Needs design and legal review.',
+  },
+  {
+    id: 'PLT-07',
+    title: 'Portal accessibility',
+    body: 'Custom plugin charts and iframed pages need explicit WCAG validation. Native Canvas accessibility does not automatically cover ForeVita overlays.',
+  },
+  {
+    id: 'PHS-09',
+    title: 'Phase eligibility rules',
+    body: 'Canvas can represent config-driven phase rules. ForeVita must define the phase model and eligibility logic first (ties OD-10).',
+  },
+  {
+    id: 'VEN-12',
+    title: 'Result-type routing',
+    body: 'Canvas has release controls but not automatic genetic-result counselling gates. Needs design with LAB-11 and PLT-09.',
+  },
+  {
+    id: 'CHN-04',
+    title: 'Portal performance',
+    body: 'Depends on ForeVita page design over Canvas FHIR and Replicant. Joint performance review recommended.',
+  },
+  {
+    id: 'AI-CTX-03',
+    title: 'Cycle context for AI',
+    body: 'Cycle day may not live on the Canvas observation. ForeVita must attach it in Supabase or plugin overlay. Ties LAB-15.',
+  },
+] as const
 
 export const chatAgents = [
   {
@@ -404,7 +675,7 @@ export const chatAgents = [
     name: 'General medical AI',
     who: 'Base member, free, all day',
     nodes: '1.4, 2.1, 2.5, 3.1',
-    sees: 'Intake, uploads, extracted labs, goals, confirmed phase, and the full chat history, including the pre-signup question.',
+    sees: 'Intake, uploads, extracted labs, goals, confirmed phase, Canvas FHIR observations where synced, and the full chat history, including the pre-signup question.',
     okf: 'Base bundle: phase detection rules, band definitions, upload handling, preliminary formula schema, AMH explainer. Protocol depth and dosing concepts are excluded at assembly.',
     does: 'Explains her own health. Proposes a phase. Summarises uploads. Writes the preliminary formula. Delivers the AMH explainer, the moment that converts.',
     cannot: ['Protocol depth', 'Dosing', 'Add-on recommendation', 'Hide the safety path behind Premium'],
@@ -432,41 +703,77 @@ export type ChatAgentId = (typeof chatAgents)[number]['id']
 
 export const chatPipeline = [
   {
+    id: 'scope',
+    label: 'Scope',
     title: 'Scope the agent',
     body: 'S1, S2, or S3 is chosen by auth and entitlement. Data access and OKF bundle scope are enforced server side by protocol rules, not by a line in the prompt.',
+    systems: ['Auth', 'Entitlements', 'Protocol rules'],
+    detail: 'Anonymous token on S1. Member record unlocks S2. Premium entitlement unlocks S3.',
   },
   {
+    id: 'wire',
+    label: 'Wire',
     title: 'Wire OKF and assemble context',
-    body: 'The adapter resolves agent, phase, and entitlement into an OKF bundle manifest. S1 gets public education concepts. S2 gets base member concepts plus phase detection. S3 gets the active phase protocol set. From S2 up, the member record in Supabase is merged in. Same agent, phase, and OKF versions produce the same context.',
+    body: 'The adapter resolves agent, phase, and entitlement into an OKF bundle manifest. From S2 up, Supabase member state and Canvas FHIR observations merge in. Same agent, phase, and OKF versions produce the same context.',
+    systems: ['OKF', 'Supabase', 'Canvas FHIR'],
+    detail: 'Named links pull exact concepts. No embedding search. Context is deterministic for a given version set.',
   },
   {
+    id: 'infer',
+    label: 'Infer',
     title: 'Infer and stream',
     body: 'Claude is called only through the internal adapter, on top of its pretrained base. The reply streams over SSE with concept IDs and versions attached. Time to first token is targeted under one second on mobile.',
+    systems: ['Adapter', 'Claude', 'SSE'],
+    detail: 'No vendor SDK in app code. Provenance attaches on the first token, not after the stream ends.',
   },
   {
+    id: 'gate',
+    label: 'Gate',
     title: 'Gate the release',
     body: 'Output is linted, provenance is attached, crisis routing runs on all three surfaces. Tier 2 is held until an APP signs. The member sees pending, never a partial formula.',
+    systems: ['Linter', 'Crisis route', 'Review queue'],
+    detail: 'Guardrails are code paths with failing tests, not prompt instructions the model might ignore.',
   },
 ] as const
 
+export type ChatPipelineId = (typeof chatPipeline)[number]['id']
+
 export const chatOkfWiring = [
   {
+    id: 'author',
+    label: 'Author',
     title: 'Authored in admin',
     body: 'Clinical staff edit OKF concept files: protocols, bands, explainers, prohibited terms, review tiers. Each file is versioned. A version is immutable once referenced in an inference.',
+    detail: 'One markdown file per concept. YAML frontmatter holds IDs, links, and review tiers. Rollback is a record swap.',
+    files: ['protocol.md', 'band.md', 'explainer.md', 'guardrail.md'],
   },
   {
+    id: 'scope',
+    label: 'Scope',
     title: 'Scoped at the API',
     body: 'The adapter maps S1, S2, or S3 to a bundle manifest before any model call. Public, base, and phase scopes are enforced in code. Concepts outside scope never enter context.',
+    detail: 'S1 gets public explainers only. S2 adds member-safe bands. S3 adds phase protocols. Scope is a code gate, not a prompt request.',
+    files: ['S1 public', 'S2 base', 'S3 phase'],
   },
   {
+    id: 'assemble',
+    label: 'Assemble',
     title: 'Assembled by link, not search',
     body: 'Named links and phase tags pull exact concepts into the prompt window. Licensed corpus passages arrive as linked OKF concepts, not as raw PDF chunks or embedding hits.',
+    detail: 'The adapter follows edges: protocol points at bands, bands point at explainers. Similarity search never chooses the formula.',
+    files: ['protocol → band', 'band → explainer', 'explainer → corpus'],
   },
   {
+    id: 'pin',
+    label: 'Pin',
     title: 'Pinned on every reply',
     body: 'Each streamed answer records which concept IDs and versions were used. A clinician correction updates the OKF record. The next inference uses the new version. Nothing rewrites a reply already sent.',
+    detail: 'Provenance is attached on the first token. Corrections land on the next call, never on a signed formula.',
+    files: ['okf:band.amh@v12', 'okf:proto.ov@v4'],
   },
 ] as const
+
+export type ChatOkfId = (typeof chatOkfWiring)[number]['id']
 
 export const chatKnowledge = [
   {
@@ -511,9 +818,10 @@ export const gates = [
 
 export const assumptions = [
   'Responsive web only. No native applications.',
+  'Canvas Medical is the clinical platform. ForeVita consumes FHIR and builds plugins, not a parallel EMR.',
   'Client feedback within two working days at each checkpoint.',
   'Scope is fixed. Additions displace existing items.',
-  'Vendor contracts sit with the client and are off the critical path.',
+  'Canvas integration enrollments sit with the client and are configure work, not SOW build.',
 ]
 
 export const risks = [
@@ -544,6 +852,13 @@ export const risks = [
     impact: 4,
     likelihood: 5,
     mitigation: 'Build thin. Defer bulk operations and reporting depth.',
+  },
+  {
+    id: 'canvas',
+    title: 'Canvas enrollment slips the clinical path',
+    impact: 4,
+    likelihood: 3,
+    mitigation: 'Start Health Gorilla and Surescripts enrollment in week one. Stub with visible placeholders only for ForeVita-specific kit flows.',
   },
   {
     id: 'aws',
@@ -579,6 +894,10 @@ export const decisionGroups = [
   {
     title: 'Technical',
     items: [
+      'Canvas custom domain and session timeout (CAN-03, CAN-10)',
+      'Cycle day AOE round-trip with Health Gorilla (LAB-15)',
+      'Kit logistics data source (LAB-05)',
+      'Canvas enrollment timing for Health Gorilla and Surescripts',
       'Infrastructure as code',
       'API hosting',
       'Kit timers and reminders',
